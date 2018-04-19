@@ -170,8 +170,6 @@ class Routes_model extends CI_Model {
         return $grouped;
     }
     public function search_limited_routes($limit, $start,$keys, $sort) {
-        include_once(APPPATH."models/helperClasses/Route_Details.php");
-
         if($keys['id'] != ''){
             $this->db->where('routes.id', $keys['id']);
         }
@@ -232,8 +230,6 @@ class Routes_model extends CI_Model {
     }
 
     public function count_searched_routes($keys) {
-        include_once(APPPATH."models/helperClasses/Route_Details.php");
-
         if($keys['id'] != ''){
             $this->db->where('routes.id', $keys['id']);
         }
