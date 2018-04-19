@@ -236,7 +236,7 @@
                                         <th><a href="<?php echo $this->helper_model->sorting_info('sourceCity.cityName'); ?>" class="sortable-table-heading"><i class="<?= $this->helper_model->sorting_icon('sourceCity.cityName', 'string'); ?>"> </i> Source</a></th>
                                         <th><a href="<?php echo $this->helper_model->sorting_info('destinationCity.cityName'); ?>" class="sortable-table-heading"><i class="<?= $this->helper_model->sorting_icon('destinationCity.cityName', 'string'); ?>"> </i> Destination</a></th>
                                         <th><a href="<?php echo $this->helper_model->sorting_info('products.productName'); ?>" class="sortable-table-heading"><i class="<?= $this->helper_model->sorting_icon('product.productName', 'string'); ?>"> </i> Product</a></th>
-                                        <th><a href="<?php echo $this->helper_model->sorting_info('freight'); ?>" class="sortable-table-heading"><i class="<?= $this->helper_model->sorting_icon('freight', 'numeric'); ?>"> </i> Freight</a></th>
+                                        <th><a href="<?php echo $this->helper_model->sorting_info('freights.freight'); ?>" class="sortable-table-heading"><i class="<?= $this->helper_model->sorting_icon('freight', 'numeric'); ?>"> </i> Freight</a></th>
                                         <th></th>
                                     </tr>
                                     </thead>

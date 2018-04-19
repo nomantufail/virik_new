@@ -184,6 +184,9 @@ class Routes_model extends CI_Model {
         if($keys['product'] != ''){
             $this->db->where('routes.product', $keys['product']);
         }
+        if($keys['freight'] != ''){
+            $this->db->where('freights.freight', $keys['freight']);
+        }
         switch($keys['route_type'])
         {
             case 'primary':
@@ -200,41 +203,34 @@ class Routes_model extends CI_Model {
                 break;
         }
 
-        if($sort['sort_by'] != 'freight'){
-            $this->db->order_by($sort['sort_by'], $sort['order']);
-        }
-        if($keys['freight'] == ''){
-            $this->db->limit($limit, $start);
-        }
-        $this->db->select('routes.*');
+        $this->db->select('
+            routes.id id, routes.type type, routes.source sourceId, routes.destination destintationId,
+            routes.product productId, sourceCity.cityName source, destinationCity.cityName destination,
+            products.productName product, freights.id freight_id, freights.freight freight,
+            freights.startDate startDate,
+            freights.endDate endDate,(
+                case
+                    when now() between freights.startDate and freights.endDate then
+                        1
+                    else
+                        0
+                end
+            ) as is_freight_active,
+            date_format(`freights`.`startDate`, "%b %D,%Y") as formated_startDate,
+            date_format(`freights`.`endDate`, "%b %D,%Y") as formated_endDate
+        ', false);
         $this->db->from('routes');
         $this->db->where('routes.active',1);
+        $this->db->join('freights','routes.id = freights.route_id','left');
         $this->db->join('cities as sourceCity','sourceCity.id = routes.source','inner');
         $this->db->join('cities as destinationCity','destinationCity.id = routes.destination','inner');
         $this->db->join('products','products.id = routes.product','inner');
-        $results = $this->db->get()->result();
-
-        $routes = array();
-        foreach($results as $result){
-            array_push($routes,new Route_Details($result));
-        }
-        if($keys['freight'] != ''){
-            $searched_routes = array();
-            foreach($routes as $route){
-                if($route->freight == $keys['freight']){
-                    array_push($searched_routes, $route);
-                }
-            }
-            $routes = $searched_routes;
-        }
-        if($sort['sort_by'] == 'freight'){
-            usort($routes, array("Sorting_Model", "sort_routes"));
-            $start = ($start == '')?0:$start;
-            $routes = array_slice($routes, $start,($limit));
-        }
-
-        return $routes;
+        $this->db->where('(`freights`.`id` = (SELECT `id` from `freights` where `route_id` = routes.id ORDER by `id` DESC LIMIT 1) or freights.id is null)', NULL, FALSE);
+        $this->db->order_by($sort['sort_by'], $sort['order']);
+        $this->db->limit($limit, $start);
+        return $this->db->get()->result();
     }
+
     public function count_searched_routes($keys) {
         include_once(APPPATH."models/helperClasses/Route_Details.php");
 
@@ -267,11 +263,11 @@ class Routes_model extends CI_Model {
                 break;
         }
 
-        $this->db->select('routes.id');
+        $this->db->select('1');
         $this->db->from('routes');
         $this->db->join('freights','routes.id = freights.route_id','left');
         $this->db->where('routes.active',1);
-        $this->db->where('`freights`.`id` = (SELECT `id` from `freights` where `route_id` = routes.id ORDER by `id` DESC LIMIT 1)', NULL, FALSE);
+        $this->db->where('(`freights`.`id` = (SELECT `id` from `freights` where `route_id` = routes.id ORDER by `id` DESC LIMIT 1) or freights.id is null)', NULL, FALSE);
         if($keys['freight'] != ''){
            $this->db->where('freights.freight',$keys['freight']);
         }

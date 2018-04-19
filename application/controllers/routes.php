@@ -36,7 +36,7 @@ class Routes extends ParentController {
         );
         //defining the sorting column
         $sort = array(
-            'sort_by'=>(isset($_GET['sort_by']))?$_GET['sort_by']:'entryDate',
+            'sort_by'=>(isset($_GET['sort_by']))?$_GET['sort_by']:'routes.entryDate',
             'order' => (isset($_GET['order']))?$_GET['order']:'asc',
         );
         ///////////////////////////////////////////////////////////////
