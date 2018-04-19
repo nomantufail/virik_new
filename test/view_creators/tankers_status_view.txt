@@ -1,0 +1,34 @@
+    function tankers_status_view()
+    {
+        $this->db->select("
+            tankers.id, tankers.truck_number, tankers.engine_number, tankers.chase_number,
+            tankers.fitness_certificate, tankers.capacity,
+            (
+              CASE
+                WHEN trips.trip_id IS NULL THEN
+                    tankers.customerId
+                ELSE
+                    trips.customer_id
+              END
+            ) as customerId,
+            trips.source, trips.destination, trips.product,
+            (
+              CASE
+                WHEN trips.trip_id IS NULL THEN
+                    customers.name
+                ELSE
+                    trips.customer_name
+              END
+            ) as customer,
+            trips.trip_id as trip_id, trips.entryDate as trip_entry_date, trips.product_id,
+            ( CASE
+                WHEN trips.trip_id IS NULL THEN 0
+                ELSE 1
+              END
+            ) as bze,
+        ");
+        $this->db->join('incomplete_trips_view as trips','trips.tanker_id = tankers.id','left');
+        $this->db->join('customers','customers.id = tankers.customerId','left');
+        $result = $this->db->get('tanker')->result();
+        var_dump($result);
+    }

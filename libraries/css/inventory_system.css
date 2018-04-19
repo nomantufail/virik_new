@@ -1,0 +1,22 @@
+.whole_page_container
+{
+    min-height: 700px;
+}
+.list_table
+{
+    border-top: 3px solid lightgray;
+}
+.page_heading_container
+{
+    background-color: lightgray;
+}
+.actual_body_contents
+{
+    margin: 30px;
+}
+.my_table{
+    font-size: 12px;
+}
+.select_box{
+
+}

@@ -1,0 +1,9 @@
+function calculation_sheet_view()
+{
+	$this->db->select('
+	*,product_id as product, trip_detail_id as detail_id, wht as tax,
+
+	');
+	$result = $this->db->get('trips_details_upper_layer_vie')->result();
+	var_dump($result);
+}

@@ -1,0 +1,15 @@
+    public function dr_cr_status_for_manage_accounts_view_generator()
+    {
+        $this->db->select('
+            union_of_automatic_and_mass_vouchers.voucher_id, union_of_automatic_and_mass_vouchers.trip_detail_id,
+            voucher_entry.account_title_id, account_titles.title as account_title, voucher_entry.dr_cr,
+        ');
+        $this->db->join('voucher_journal','voucher_journal.id = union_of_automatic_and_mass_vouchers.voucher_id','left');
+        $this->db->join('voucher_entry','voucher_entry.journal_voucher_id = voucher_journal.id','inner');
+        $this->db->join('account_titles','account_titles.id = voucher_entry.account_title_id','left');
+
+        $this->db->where('voucher_journal.active','1');
+
+        $result = $this->db->get('union_of_automatic_and_mass_voucher')->result();
+        var_dump($result); die();
+    }

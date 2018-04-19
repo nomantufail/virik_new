@@ -1,0 +1,8 @@
+import currently running db without views.
+change voucher_journal table. ( add or remove some column names)
+import shortages table in new db and truncate it.
+import trip_types table.
+import routines (optional)
+import views    (optional)
+apply some scripts to transfer old shortages to new shortage tables.
+apply foreign key constraints in voucher_entry table for journal_voucher_id.

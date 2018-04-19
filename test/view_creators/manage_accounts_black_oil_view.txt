@@ -1,0 +1,107 @@
+    //now.....................
+    public function manage_accounts_black_oil_view()
+        {
+            $shortage_amount = "(shortage_quantity * shortage_rate)";
+            $freight_on_shortage_qty_cmp = "(company_freight_unit * shortage_quantity)";
+            $freight_on_shortage_qty_cst = "(customer_freight_unit * shortage_quantity)";
+            $total_freight_cmp = "(dis_qty * company_freight_unit)";
+            $total_freight_cst = "(dis_qty * customer_freight_unit)";
+            $freight_amount_cmp = "(".$total_freight_cmp." - ".$freight_on_shortage_qty_cmp.")";
+            $freight_amount_cst = "(".$total_freight_cst." - ".$freight_on_shortage_qty_cst.")";
+            $payable_before_tax = "(".$freight_amount_cmp." - ".$shortage_amount.")";
+            $wht_amount = "(wht * ".$freight_amount_cmp." / 100)";
+            $net_payables = "(".$payable_before_tax."-".$wht_amount.")";
+            $company_commission_amount = "(company_commission * ".$freight_amount_cmp."/100)";
+            $contractor_net_freight = "(".$net_payables." - ".$company_commission_amount.")";
+            $contractor_commission = "(contractor_commission - wht - company_commission)";
+            $contractor_commission_amount = "(".$contractor_commission." * ".$freight_amount_cst."/100)";
+            $customer_freight_amount = "(".$total_freight_cst." - (contractor_commission * ".$freight_amount_cst."/100) - (".$freight_on_shortage_qty_cst." + ".$shortage_amount."))";
+
+            $select = '
+                trip_id, trip_detail_id, trip_sub_type, type as trip_type_id, stn_number
+                trip_type, entryDate as trip_date, source_city_name as source,
+                source_id, destination_city_name as destination,
+                destination_id, invoice_date, invoice_number, tanker_id, tanker_number,
+                productName as product, product_id, dis_qty, rec_qty, shortage_quantity,
+                ROUND('.$total_freight_cmp.', 2) as total_freight_cmp,
+                shortage_rate, ROUND('.$shortage_amount.', 2) as shortage_amount,
+                ROUND('.$freight_on_shortage_qty_cmp.', 2) as freight_on_shortage_qty_cmp,
+                ROUND('.$freight_on_shortage_qty_cst.', 2) as freight_on_shortage_qty_cst,
+                customer_freight_unit, company_freight_unit, company_name as company, company_id,
+                ROUND('.$payable_before_tax.', 2) as payable_before_tax, wht,
+                ROUND('.$wht_amount.', 2) as wht_amount, ROUND('.$freight_amount_cmp.' ,2) as freight_amount_cmp,
+                ROUND('.$net_payables.', 2) as net_payables, ROUND('.$company_commission_amount.', 2) as company_commission_amount,
+                ROUND('.$contractor_net_freight.', 2) as contractor_net_freight, company_commission,
+                ROUND('.$contractor_commission.', 2) as contractor_commission,
+                ROUND('.$contractor_commission_amount.', 2) as contractor_commission_amount,
+                contractor_name as contractor, contractor_id,
+                ROUND('.$total_freight_cst.', 2) as total_freight_cst, ROUND('.$freight_amount_cst.', 2) as freight_amount_cst,
+                ROUND('.$customer_freight_amount.', 2) as customer_freight, customer_name as customer,
+                customer_id, bill_id, trip_id as service_charges, billed_date_time,
+                 ( CASE
+                        WHEN bill_id = "0" THEN "Not Billed"
+                        ELSE "Billed"
+                    END
+                 ) AS billed
+            ';
+            $this->db->select($select);
+            $this->db->where('product_type','black oil');
+            $this->db->order_by('trip_id','desc');
+            $result = $this->db->get('trips_details_upper_layer_vie as td')->result();
+            var_dump($result);
+        }
+
+
+
+    //before......................
+    public function manage_accounts_black_oil_view()
+    {
+        $shortage_amount = "(shortage_quantity * shortage_rate)";
+        $freight_on_shortage_qty_cmp = "(company_freight_unit * shortage_quantity)";
+        $freight_on_shortage_qty_cst = "(customer_freight_unit * shortage_quantity)";
+        $total_freight_cmp = "(dis_qty * company_freight_unit)";
+        $total_freight_cst = "(dis_qty * customer_freight_unit)";
+        $freight_amount_cmp = "(".$total_freight_cmp." - ".$freight_on_shortage_qty_cmp.")";
+        $freight_amount_cst = "(".$total_freight_cst." - ".$freight_on_shortage_qty_cst.")";
+        $payable_before_tax = "(".$freight_amount_cst." - ".$shortage_amount.")";
+        $wht_amount = "(wht * ".$freight_amount_cmp." / 100)";
+        $net_payables = "(".$payable_before_tax."-".$wht_amount.")";
+        $company_commission_amount = "(company_commission * ".$freight_amount_cmp."/100)";
+        $contractor_net_freight = "(".$net_payables." - ".$company_commission_amount.")";
+        $contractor_commission = "(contractor_commission - wht - company_commission)";
+        $contractor_commission_amount = "(".$contractor_commission." * ".$freight_amount_cst."/100)";
+        $customer_freight_amount = "(".$total_freight_cst." - (contractor_commission * ".$freight_amount_cst."/100) - (".$freight_on_shortage_qty_cst." + ".$shortage_amount."))";
+
+        $select = '
+            trip_id, trip_detail_id, trip_sub_type, type as trip_type_id, stn_number
+            trip_type, entryDate as trip_date, source_city_name as source,
+            source_id, destination_city_name as destination,
+            destination_id, invoice_date, invoice_number, tanker_id, tanker_number,
+            productName as product, product_id, dis_qty, rec_qty, shortage_quantity,
+            ROUND('.$total_freight_cmp.', 2) as total_freight_cmp,
+            shortage_rate, ROUND('.$shortage_amount.', 2) as shortage_amount,
+            ROUND('.$freight_on_shortage_qty_cmp.', 2) as freight_on_shortage_qty_cmp,
+            ROUND('.$freight_on_shortage_qty_cst.', 2) as freight_on_shortage_qty_cst,
+            customer_freight_unit, company_freight_unit, company_name as company, company_id,
+            ROUND('.$payable_before_tax.', 2) as payable_before_tax, wht,
+            ROUND('.$wht_amount.', 2) as wht_amount, ROUND('.$freight_amount_cmp.' ,2) as freight_amount_cmp,
+            ROUND('.$net_payables.', 2) as net_payables, ROUND('.$company_commission_amount.', 2) as company_commission_amount,
+            ROUND('.$contractor_net_freight.', 2) as contractor_net_freight, company_commission,
+            ROUND('.$contractor_commission.', 2) as contractor_commission,
+            ROUND('.$contractor_commission_amount.', 2) as contractor_commission_amount,
+            contractor_name as contractor, contractor_id,
+            ROUND('.$total_freight_cst.', 2) as total_freight_cst, ROUND('.$freight_amount_cst.', 2) as freight_amount_cst,
+            ROUND('.$customer_freight_amount.', 2) as customer_freight, customer_name as customer,
+            customer_id, bill_id, trip_id as service_charges, billed_date_time,
+             ( CASE
+                    WHEN bill_id = "0" THEN "Not Billed"
+                    ELSE "Billed"
+                END
+             ) AS billed
+        ';
+        $this->db->select($select);
+        $this->db->where('product_type','black oil');
+        $this->db->order_by('trip_id','desc');
+        $result = $this->db->get('trips_details_upper_layer_vie as td')->result();
+        var_dump($result);
+    }
