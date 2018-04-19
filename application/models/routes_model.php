@@ -267,31 +267,15 @@ class Routes_model extends CI_Model {
                 break;
         }
 
-        $this->db->select('routes.id as id, routes.source as source, routes.destination as destination, routes.entryDate as entryDate, routes.product as product, freights.freight as freight, routes.type as type, routes.active as active');
+        $this->db->select('routes.id');
         $this->db->from('routes');
         $this->db->join('freights','routes.id = freights.route_id','left');
         $this->db->where('routes.active',1);
         $this->db->where('`freights`.`id` = (SELECT `id` from `freights` where `route_id` = routes.id ORDER by `id` DESC LIMIT 1)', NULL, FALSE);
-        
         if($keys['freight'] != ''){
            $this->db->where('freights.freight',$keys['freight']);
         }
-        $results = $this->db->get()->result();
-        // $routes = array();
-        // foreach($results as $result){
-        //     array_push($routes,new Route_Details($result));
-        // }
-        // if($keys['freight'] != ''){
-        //     $searched_routes = array();
-        //     foreach($routes as $route){
-        //         if($route->freight == $keys['freight']){
-        //             array_push($searched_routes, $route);
-        //         }
-        //     }
-        //     $routes = $searched_routes;
-        // }
-
-        return sizeof($results);
+        return $this->db->count_all_results();
     }
 
     public function route($id, $detail='all'){
