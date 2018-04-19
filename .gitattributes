@@ -1,0 +1,7 @@
+test2.sql filter=lfs diff=lfs merge=lfs -text
+currently_running.sql filter=lfs diff=lfs merge=lfs -text
+backups/viriklogistics_active_with_views.sql filter=lfs diff=lfs merge=lfs -text
+backups/viriklogistics_shortage_test[[:space:]](2).sql filter=lfs diff=lfs merge=lfs -text
+backups/viriklogistics_shortage_test[[:space:]](5).sql filter=lfs diff=lfs merge=lfs -text
+backups/viriklogistics_shortage_test[[:space:]](6).sql filter=lfs diff=lfs merge=lfs -text
+backups/viriklog_viriklogistics_2.sql filter=lfs diff=lfs merge=lfs -text
