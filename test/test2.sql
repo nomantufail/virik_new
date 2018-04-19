@@ -1,1 +1,0 @@
-SELECT * FROM account_titles WHERE id != (2+2);
